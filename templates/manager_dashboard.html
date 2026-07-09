@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - FoodExpress</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; }
+        .card-stats {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            color: white;
+            transition: transform 0.2s;
+        }
+        .card-stats:hover { transform: translateY(-2px); }
+        .card-stats .card-title { font-weight: 500; }
+        .card-stats .display-6 { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <!-- Navbar (Manager) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🍔 FoodExpress</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="manager.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h1 class="mb-4">📊 Manager Dashboard</h1>
+
+        <!-- Statistics Cards Row 1 -->
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+            <!-- Today's Orders -->
+            <div class="col">
+                <div class="card card-stats bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">Today's Orders</h5>
+                        <p class="display-6">12</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Monthly Orders -->
+            <div class="col">
+                <div class="card card-stats bg-info text-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Monthly Orders</h5>
+                        <p class="display-6">348</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Total Revenue -->
+            <div class="col">
+                <div class="card card-stats bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Revenue</h5>
+                        <p class="display-6">$4,250</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards Row 2 (Critical KPI) -->
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+            <!-- Delayed Orders -->
+            <div class="col">
+                <div class="card card-stats bg-warning text-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Delayed Orders</h5>
+                        <p class="display-6">3</p>
+                        <small>⚠️ Need attention</small>
+                    </div>
+                </div>
+            </div>
+            <!-- Failed / Cancelled Orders -->
+            <div class="col">
+                <div class="card card-stats bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Failed / Cancelled</h5>
+                        <p class="display-6">2</p>
+                        <small>Today</small>
+                    </div>
+                </div>
+            </div>
+            <!-- Average Preparation Time (Optional) -->
+            <div class="col">
+                <div class="card card-stats bg-secondary">
+                    <div class="card-body">
+                        <h5 class="card-title">Avg. Prep Time</h5>
+                        <p class="display-6">18 min</p>
+                        <small>Today</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Critical Orders Table (Delayed / Failed) - no customer names -->
+        <h3 class="mb-3">🚨 Critical Orders</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                        <th>Time</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>#105</strong></td>
+                        <td><span class="badge bg-danger">Failed</span></td>
+                        <td>Customer unreachable</td>
+                        <td>11:20 AM</td>
+                        <td>$15.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>#104</strong></td>
+                        <td><span class="badge bg-warning text-dark">Delayed</span></td>
+                        <td>Missing ingredients</td>
+                        <td>10:45 AM</td>
+                        <td>$8.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>#102</strong></td>
+                        <td><span class="badge bg-warning text-dark">Delayed</span></td>
+                        <td>High order volume</td>
+                        <td>9:50 AM</td>
+                        <td>$9.50</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

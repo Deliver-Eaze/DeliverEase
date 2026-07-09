@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Dashboard - FoodExpress</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .order-card {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .order-card:hover {
+            transform: translateY(-2px);
+        }
+        /* Status border colors */
+        .border-status-new {
+            border-left: 8px solid #ffc107; /* yellow */
+        }
+        .border-status-delayed {
+            border-left: 8px solid #dc3545; /* red */
+        }
+        .border-status-ready {
+            border-left: 8px solid #198754; /* green */
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .order-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (Chef) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🍔 FoodExpress</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="chef.html">Kitchen</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h1 class="mb-4">👨‍🍳 Kitchen Dashboard</h1>
+        
+        <!-- Legend -->
+        <div class="d-flex gap-3 mb-4">
+            <span><span class="badge bg-warning text-dark">New Order</span> = Yellow</span>
+            <span><span class="badge bg-danger">Delayed</span> = Red</span>
+            <span><span class="badge bg-success">Ready</span> = Green</span>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Card 1: New Order (Yellow) -->
+            <div class="col">
+                <div class="card order-card border-status-new">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="order-number">#101</span>
+                                <span class="text-muted ms-2">Cust. ID: 12</span>
+                            </div>
+                            <span class="badge bg-warning text-dark status-badge">New</span>
+                        </div>
+                        <p class="text-muted mb-1"><strong>Time:</strong> 10:30 AM</p>
+                        <hr>
+                        <ul class="list-unstyled mb-2">
+                            <li>🍔 Chicken Burger ×2</li>
+                            <li>🥤 Cola ×1</li>
+                        </ul>
+                        <p class="text-muted small">Just placed</p>
+                        <a href="#" class="btn btn-warning btn-sm w-100">Start Preparing</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Delayed Order (Red) -->
+            <div class="col">
+                <div class="card order-card border-status-delayed">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="order-number">#102</span>
+                                <span class="text-muted ms-2">Cust. ID: 8</span>
+                            </div>
+                            <span class="badge bg-danger status-badge">Delayed</span>
+                        </div>
+                        <p class="text-muted mb-1"><strong>Time:</strong> 9:50 AM</p>
+                        <hr>
+                        <ul class="list-unstyled mb-2">
+                            <li>🍔 Beef Burger ×1</li>
+                            <li>🍟 Fries ×1</li>
+                        </ul>
+                        <p class="text-danger small">Waiting for 25 min</p>
+                        <a href="#" class="btn btn-danger btn-sm w-100">Prioritize</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Ready Order (Green) -->
+            <div class="col">
+                <div class="card order-card border-status-ready">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="order-number">#103</span>
+                                <span class="text-muted ms-2">Cust. ID: 4</span>
+                            </div>
+                            <span class="badge bg-success status-badge">Ready</span>
+                        </div>
+                        <p class="text-muted mb-1"><strong>Time:</strong> 10:15 AM</p>
+                        <hr>
+                        <ul class="list-unstyled mb-2">
+                            <li>🍔 Veggie Burger ×3</li>
+                            <li>🧃 Orange Juice ×2</li>
+                        </ul>
+                        <p class="text-success small">Ready for pickup</p>
+                        <a href="#" class="btn btn-success btn-sm w-100">Mark as Delivered</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
