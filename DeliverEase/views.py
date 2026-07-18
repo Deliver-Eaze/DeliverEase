@@ -11,8 +11,8 @@ def login_view(request):
        else :
           return redirect('menu')
     if request.method=='POST':
-       username = request.POST['username']
-       password = request.POST['password']
+       username = request.POST.get('username')
+       password = request.POST.get('password')
        user = authenticate(request,username=username,password=password)
        if user:
           login(request,user)
@@ -22,18 +22,21 @@ def login_view(request):
               return redirect('manager')
           else :
               return redirect('menu')
-    else:
-       messages.error(request,'invalid username or password')  
-       return render(request,'login.html')
+       else:
+         messages.error(request,'invalid username or password')  
+         return render(request,'login.html')
+    return render(request,'login.html')
 
-def register_view(requst):
+def register_view(request):
     if request.method=='POST':
        username = request.POST['username']
        password = request.POST['password']
        email = request.POST['email']
+       User.objects.create_user(username=username,email=email,password=password)
        message.success(request,'Account created !') 
        return redirect('login')
-       return render(request,'register.html')
+
+    return render(request,'register.html')
 
 
 def logout_view(request):

@@ -4,8 +4,8 @@ const addButtons = document.querySelectorAll('.add-to-cart-btn');
 addButtons.forEach(function(button){
    button.addEventListener('click',function(){
     const id = this.getAttribute('data-id');
-    const name = this.getAttribute(data-name');
-    const price = this.getAttribute(data-price');
+    const name = this.getAttribute('data-name');
+    const price = this.getAttribute('data-price');
     addToCart(id,name,price);
 });
 });
@@ -85,7 +85,7 @@ let html='';
 cart.forEach(function(item){
   const subtotal = item.price * item.quantity;
   total += subtotal;
-  html +='<div class="d-flex justify-content-between align-item-center border-bottom py-2">
+  html +=`<div class="d-flex justify-content-between align-items-center border-bottom py-2">
 <div>
 <span class="fw-bold">${item.name}</span>
 <small class="text-muted">x${item.quantity}</small>
@@ -93,7 +93,7 @@ cart.forEach(function(item){
 <div><span class="fw-bold">$${subtotal.toFixed(2)}</span>
 <button class="btn btn-sm btn-outline-danger ms-2 " onclick="removeFromCart('${item.id}')">Remove </button>
 </div>
-</div>';
+</div>`;
 });
 container.innerHTML = html;
 if(totalElement) totalElement.textContent='Total:$'+ total.toFixed(2);
@@ -116,16 +116,16 @@ let html='';
 cart.forEach(function(item){
 const subtotal = item.price * item.quantity;
 total +=subtotal;
-html +='<div class="d-flex justify-content-between">
+html +=`<div class="d-flex justify-content-between">
 <span>${item.name} x${item.quantity} </span>
 <span>$${subtotal.toFixed(2)}</span>
-</div>';
+</div>`;
 });
-html +='<hr>';
-html +='<div class="d-flex justify-content-between fw_bold">
+html +=`<hr>`;
+html +=`<div class="d-flex justify-content-between fw-bold">
 <span>Total</span>
-<span>$${total.toFixed(2))</span>
-</div>';
+<span>$${total.toFixed(2)}</span>
+</div>`;
 summaryContainer.innerHTML=html;
 }
 
@@ -170,10 +170,11 @@ alter('Server error . please try again .');
 };
 
 const requestData=JSON.stringify({
-address:address;
-phone:phone;
-method:method;
+address:address,
+phone:phone,
+method:method,
 cart:cart});
+
 xhr.send(requestData);
 }
 
