@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link active" href="menu.html">Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+                    <li class="nav-item"><button  id="go-to-cart-btn" class="btn btn-success mt-3" >Cart</button></li>
                     <li class="nav-item"><a class="nav-link" href="checkout.html">My Orders</a></li>
                     <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
                 </ul>
@@ -48,7 +48,7 @@
                             <h5 class="card-title">Chicken Burger</h5>
                             <p class="card-text">Fresh chicken burger with lettuce and tomato.</p>
                             <p class="fw-bold text-success">$5.00</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                            <button class="btn btn-primary add-to-cart-btn" data-id="{{item.id}}" data-name="{{item.name}}" data.price="{{item.price}}" >Add to Cart</button>
                         </div>
                     </div>
                 </div>

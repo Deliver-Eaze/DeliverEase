@@ -10,4 +10,5 @@ urlpatterns=[
     path('checkout/',views.checkout_page,name='checkout'),
     path('chef/',views.chef_page,name='chef'),
     path('manager/',views.manager_page,name='manager'),
+    path('api/place-order/',views.api_place_order,name='api_place_order'),
 ]

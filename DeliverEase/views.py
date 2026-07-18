@@ -1,6 +1,9 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate , login , logout
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -14,18 +17,19 @@ def login_view(request):
        username = request.POST.get('username')
        password = request.POST.get('password')
        user = authenticate(request,username=username,password=password)
-       if user:
+       if user is not None:
           login(request,user)
-          if user.role=='chef':
+          if hasattr(user,'role'):
+            if user.role=='chef':
               return redirect('chef')
-          elif user.role=='manager':
+            elif user.role=='manager':
               return redirect('manager')
-          else :
+            else :
               return redirect('menu')
        else:
          messages.error(request,'invalid username or password')  
          return render(request,'login.html')
-    return render(request,'login.html')
+    
 
 def register_view(request):
     if request.method=='POST':
@@ -57,6 +61,17 @@ def chef_page(request):
 
 def manager_page(request):
     return render(request,'manager_dashboard.html')
+
+@csrf_exempt
+def api_place_order(request):
+    if request.method == 'POST':
+       data = json.loads(request.body)
+       
+       return JsonResponse({
+          'success':True,
+          'order_id':123
+})
+    return JsonResponse({'success':False,'error':'Invalid request'})
 
 
 
