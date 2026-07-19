@@ -1,111 +1,97 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+
+                           <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - FoodExpress</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        .card-img-top { height: 160px; object-fit: cover; }
-        .category-title { background-color: #e9ecef; padding: 10px; border-radius: 5px; }
+        body { background-color: #f8f9fa; }
+        .card-img-top { height: 180px; object-fit: cover; }
+        .card { transition: transform 0.2s; border-radius: 12px; overflow: hidden; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .category-title {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar (Customer) -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">🍔 FoodExpress</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="menu.html">Menu</a></li>
-                    <li class="nav-item"><button  id="go-to-cart-btn" class="btn btn-success mt-3" >Cart</button></li>
-                    <li class="nav-item"><a class="nav-link" href="checkout.html">My Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
-                </ul>
+            <a class="navbar-brand" href="#">🍔 DeliverEase</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/menu/">Menu</a>
+                <a class="nav-link" href="/cart/">
+                    <i class="bi bi-cart"></i> Cart
+                    <span id="cart-count" class="badge bg-warning text-dark">0</span>
+                </a>
+                <a class="nav-link" href="/logout/">Logout</a>
             </div>
         </div>
     </nav>
 
     <div class="container my-4">
-        <h1 class="mb-4">Menu</h1>
-        <!-- Success message -->
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            Item added to cart successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+        <h1 class="mb-4">🍽️ Our Menu</h1>
 
-        <!-- Burgers Category -->
+        <!-- عرض الفئات والأصناف -->
+        {% for category in categories %}
         <div class="mb-4">
-            <h3 class="category-title">🍔 Burgers</h3>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
+            <h3 class="category-title">{{ category.name }}</h3>
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for item in category.items.all %}
                 <div class="col">
                     <div class="card h-100">
-                        <img src="https://via.placeholder.com/300x160?text=Chicken+Burger" class="card-img-top" alt="Chicken Burger">
-                        <div class="card-body">
-                            <h5 class="card-title">Chicken Burger</h5>
-                            <p class="card-text">Fresh chicken burger with lettuce and tomato.</p>
-                            <p class="fw-bold text-success">$5.00</p>
-                            <button class="btn btn-primary add-to-cart-btn" data-id="{{item.id}}" data-name="{{item.name}}" data.price="{{item.price}}" >Add to Cart</button>
+                        {% if item.image %}
+                        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                        {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white">
+                            <i class="bi bi-image" style="font-size: 3rem;"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text text-muted small">{{ item.description|truncatewords:10 }}</p>
+                            <div class="mt-auto">
+                                <p class="fw-bold text-success fs-5">${{ item.price }}</p>
+                                <button class="btn btn-primary w-100 add-to-cart-btn"
+                                        data-id="{{ item.id }}"
+                                        data-name="{{ item.name }}"
+                                        data-price="{{ item.price }}">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://via.placeholder.com/300x160?text=Beef+Burger" class="card-img-top" alt="Beef Burger">
-                        <div class="card-body">
-                            <h5 class="card-title">Beef Burger</h5>
-                            <p class="card-text">Grilled beef burger with cheese and ketchup.</p>
-                            <p class="fw-bold text-success">$6.50</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://via.placeholder.com/300x160?text=Veggie+Burger" class="card-img-top" alt="Veggie Burger">
-                        <div class="card-body">
-                            <h5 class="card-title">Veggie Burger</h5>
-                            <p class="card-text">Healthy veggie burger with fresh vegetables.</p>
-                            <p class="fw-bold text-success">$4.50</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
+        {% empty %}
+        <div class="text-center py-5">
+            <i class="bi bi-emoji-frown" style="font-size: 4rem; color: #ccc;"></i>
+            <p class="text-muted mt-3">No items available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
 
-        <!-- Drinks Category -->
-        <div class="mb-4">
-            <h3 class="category-title">🥤 Drinks</h3>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://via.placeholder.com/300x160?text=Cola" class="card-img-top" alt="Cola">
-                        <div class="card-body">
-                            <h5 class="card-title">Cola</h5>
-                            <p class="card-text">Chilled soft drink.</p>
-                            <p class="fw-bold text-success">$1.50</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://via.placeholder.com/300x160?text=Orange+Juice" class="card-img-top" alt="Orange Juice">
-                        <div class="card-body">
-                            <h5 class="card-title">Orange Juice</h5>
-                            <p class="card-text">Freshly squeezed orange juice.</p>
-                            <p class="fw-bold text-success">$2.00</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="toast" class="toast align-items-center text-white bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-message"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
     </div>
-    <script src="/static/javaScript/customer.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/menu.js"></script>
 </body>
 </html>
