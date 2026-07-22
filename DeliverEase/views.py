@@ -7,9 +7,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import User, Category, MenuItem, Order, OrderItem, Payment
 
-
 def login_view(request):
-    
+    return render(request, 'login.html')
     if request.user.is_authenticated:
         if request.user.role == 'chef':
             return redirect('chef')
@@ -18,18 +17,20 @@ def login_view(request):
         else:
             return redirect('menu')
 
+   
     if request.method == 'POST':
-        username = request.POST.get('username' )
-        password = request.POST.get('password')
-     
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        
+       
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-           
+            
             login(request, user)
             messages.success(request, f'Welcome {username}!')
             
-           
+            
             if user.role == 'chef':
                 return redirect('chef')
             elif user.role == 'manager':
@@ -40,7 +41,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     
    
-    return render(request, 'login.html')
+
 
 
 
@@ -55,15 +56,19 @@ def register_view(request):
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
 
-   
-       
-       
-        
-        
-        if User.objects.filter(email=email).exists():
+      
+        if not username or not email or not password:
+            messages.error(request, 'All fields are required.')
+        elif password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+        elif len(password) < 6:
+            messages.error(request, 'Password must be at least 6 characters.')
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+        elif User.objects.filter(email=email).exists():
             messages.error(request, 'Email already registered.')
         else:
-             
+            
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -78,7 +83,7 @@ def register_view(request):
 
 
 def logout_view(request):
- 
+    
     logout(request)
     messages.info(request, 'You have been logged out.')
     return redirect('login')
@@ -86,22 +91,22 @@ def logout_view(request):
 
 
 @login_required  
-def menu_page(request):
-   
-    
+def menu_view(request):
+
+
     if request.user.role != 'customer':
         if request.user.role == 'chef':
             return redirect('chef')
         elif request.user.role == 'manager':
             return redirect('manager')
 
-    
+
     categories = Category.objects.prefetch_related('items').all()
 
-    
+   
     menu_data = []
     for cat in categories:
-        for item in cat.items.filter(available=True):  # الأصناف المتوفرة فقط
+        for item in cat.items.filter(available=True):  
             menu_data.append({
                 'id': item.id,
                 'name': item.name,
@@ -119,30 +124,30 @@ def menu_page(request):
     return render(request, 'menu.html', context)
 
 
+
 @login_required
-def cart_page(request):
-   
+def cart_view(request):
+    
     if request.user.role != 'customer':
         return redirect('login')
     return render(request, 'cart.html')
 
 
+
 @login_required
-def checkout_page(request):
+def checkout_view(request):
     
     if request.user.role != 'customer':
         return redirect('login')
     return render(request, 'checkout.html')
 
-
-
 @login_required
-def chef_page(request):
+def chef_view(request):
     
     if request.user.role != 'chef':
         return redirect('login')
 
-   
+    
     orders = Order.objects.filter(
         status__in=['pending', 'preparing', 'ready']
     ).order_by('-created_at')
@@ -150,9 +155,10 @@ def chef_page(request):
     return render(request, 'chef_dashboard.html', {'orders': orders})
 
 
+
 @login_required
-def manager_page(request):
-    
+def manager_view(request):
+  
     if request.user.role != 'manager':
         return redirect('login')
 
@@ -173,7 +179,7 @@ def manager_page(request):
         total=Sum('total_price')
     )['total'] or 0
 
-    
+ 
     delayed_orders = Order.objects.filter(status__in=['pending', 'preparing']).count()
 
     
@@ -188,6 +194,7 @@ def manager_page(request):
         'recent_orders': recent_orders,
     }
     return render(request, 'manager_dashboard.html', context)
+
 
 
 @csrf_exempt
@@ -216,12 +223,12 @@ def api_update_order_status(request, order_id):
 @csrf_exempt
 @login_required
 def api_place_order(request):
-    
+ 
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid method'})
 
     try:
-        # نجيب البيانات من الطلب
+        
         data = json.loads(request.body)
         address = data.get('address', '').strip()
         phone = data.get('phone', '').strip()
@@ -242,7 +249,7 @@ def api_place_order(request):
             status='pending'
         )
 
-        
+       
         total = 0
         for item in cart_items:
             try:
@@ -264,14 +271,14 @@ def api_place_order(request):
         order.total_price = total
         order.save()
 
-       
+        
         Payment.objects.create(
             order=order,
             method=method,
             is_paid=False
         )
 
-       
+        
         return JsonResponse({
             'success': True,
             'order_id': order.id,
@@ -285,9 +292,10 @@ def api_place_order(request):
         return JsonResponse({'success': False, 'error': str(e)})
 
 
+
 @csrf_exempt
 def api_login(request):
-   
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -323,10 +331,9 @@ def api_login(request):
     return JsonResponse({'success': False, 'error': 'Invalid method'})
 
 
-
 @csrf_exempt
 def api_register(request):
-   
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -351,3 +358,5 @@ def api_register(request):
             return JsonResponse({'success': True, 'redirect': '/menu/'})
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid method'})
