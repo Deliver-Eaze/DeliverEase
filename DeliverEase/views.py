@@ -142,6 +142,13 @@ def checkout_view(request):
     return render(request, 'checkout.html')
 
 @login_required
+def order_tracking_view(request):
+    if request.user.role != 'customer':
+        return redirect('login')
+    orders = Order.objects.filter(customer=request.user).order_by('-created_at')
+    return render(request,'order_tracking.html',{'orders':orders}) 
+
+@login_required
 def chef_view(request):
     
     if request.user.role != 'chef':

@@ -1,4 +1,3 @@
-// ==================== Cart JavaScript ====================
 
 let cart = [];
 
@@ -89,14 +88,14 @@ function displayCart() {
         `;
     });
 
-    const total = subtotal + 2; // رسوم التوصيل
+    const total = subtotal + 2; 
     container.innerHTML = html;
     subtotalElement.textContent = '$' + subtotal.toFixed(2);
     totalElement.textContent = '$' + total.toFixed(2);
     checkoutBtn.disabled = false;
 }
 
-// ==================== تهيئة الصفحة ====================
+
 document.addEventListener('DOMContentLoaded', function() {
     loadCart();
     displayCart();

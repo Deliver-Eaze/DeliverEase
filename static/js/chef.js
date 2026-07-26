@@ -1,10 +1,8 @@
-// ==================== Chef JavaScript ====================
 
 let orders = [];
 
 function loadOrders() {
-    // هنا ممكن نعمل fetch لـ API تجيب الطلبات
-    // لكن حالياً نعرض البيانات من القالب
+    
     const orderCards = document.querySelectorAll('.order-card');
     orderCards.forEach(function(card) {
         const orderId = card.getAttribute('data-id');

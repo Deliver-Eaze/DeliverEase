@@ -1,4 +1,3 @@
-// ==================== Checkout JavaScript ====================
 
 let cart = [];
 
@@ -57,7 +56,7 @@ function placeOrder() {
         return;
     }
     
-    // إرسال الطلب
+    
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/place-order/', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -68,7 +67,7 @@ function placeOrder() {
             if (xhr.status === 200) {
                 const data = JSON.parse(xhr.responseText);
                 if (data.success) {
-                    // مسح العربة
+                    
                     localStorage.removeItem('foodexpress_cart');
                     cart = [];
                     showMessage('Order #' + data.order_id + ' placed successfully! Redirecting...', 'success');
@@ -110,17 +109,16 @@ function getCSRFToken() {
     return '';
 }
 
-// ==================== تهيئة الصفحة ====================
 document.addEventListener('DOMContentLoaded', function() {
     loadCart();
     displayOrderSummary();
     
-    // إظهار/إخفاء رفع الإيصال
+    
     document.getElementById('paymentMethod').addEventListener('change', function() {
         document.getElementById('receiptGroup').style.display = this.value === 'online' ? 'block' : 'none';
     });
     
-    // زر تقديم الطلب
+    
     document.getElementById('placeOrderBtn').addEventListener('click', placeOrder);
 });
 

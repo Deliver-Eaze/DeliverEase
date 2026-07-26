@@ -8,6 +8,7 @@ urlpatterns=[
     path('menu/',views.menu_view,name='menu'),
     path('cart/',views.cart_view,name='cart'),
     path('checkout/',views.checkout_view,name='checkout'),
+    path('track/' , views.order_tracking_view,name='order_tracking'),
     path('chef/',views.chef_view,name='chef'),
     path('manager/',views.manager_view,name='manager'),
     path('api/login/',views.api_login,name='api_login'),

@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen - DeliverEase</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }
         .order-card {
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            border-left: 8px solid #ffc107;
         }
-        .order-card.preparing { border-left-color: #0dcaf0; }
-        .order-card.ready { border-left-color: #198754; }
-        .order-card.delayed { border-left-color: #dc3545; }
+        .pending { border-left: 8px solid #ffc107; }
+        .preparing { border-left: 8px solid #0dcaf0; }
+        .ready { border-left: 8px solid #198754; }
+        .delayed { border-left: 8px solid #dc3545; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#">🍔 DeliverEase</a>
             <div class="navbar-nav ms-auto">
@@ -31,16 +30,77 @@
     </nav>
 
     <div class="container my-4">
-        <h1 class="mb-4">👨‍🍳 Active Orders</h1>
+        <h1>👨‍🍳 Active Orders</h1>
 
-        <div id="message" class="alert d-none"></div>
-
-        <div id="orders-container">
-            <!-- JavaScript هيملاه -->
-        </div>
+        {% if orders %}
+            <div class="row">
+                {% for order in orders %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card order-card {{ order.status }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title">Order #{{ order.id }}</h5>
+                                <span class="badge {% if order.status == 'pending' %}bg-warning text-dark{% elif order.status == 'preparing' %}bg-info text-dark{% elif order.status == 'ready' %}bg-success{% endif %}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </div>
+                            <p><strong>Time:</strong> {{ order.created_at|date:"H:i" }}</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                {% for item in order.items.all %}
+                                <li>{{ item.menu_item.name }} x {{ item.quantity }}</li>
+                                {% endfor %}
+                            </ul>
+                            <hr>
+                            <div class="order-actions">
+                                {% if order.status == 'pending' %}
+                                    <button class="btn btn-warning btn-sm w-100" onclick="updateStatus({{ order.id }}, 'preparing')">Start Preparing</button>
+                                {% elif order.status == 'preparing' %}
+                                    <button class="btn btn-success btn-sm w-100" onclick="updateStatus({{ order.id }}, 'ready')">Mark as Ready</button>
+                                {% elif order.status == 'ready' %}
+                                    <span class="text-muted small">Waiting for delivery</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted">No active orders at the moment.</p>
+            </div>
+        {% endif %}
     </div>
 
+    <script>
+        // دالة بسيطة لتغيير الحالة باستخدام Ajax
+        function updateStatus(orderId, newStatus) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/order/' + orderId + '/status/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', getCSRFToken());
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    location.reload(); // نعيد تحميل الصفحة لرؤية التغيير
+                } else {
+                    alert('Failed to update status.');
+                }
+            };
+            xhr.send(JSON.stringify({ status: newStatus }));
+        }
+
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith('csrftoken=')) {
+                    return cookie.substring('csrftoken='.length);
+                }
+            }
+            return '';
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/chef.js"></script>
 </body>
 </html>

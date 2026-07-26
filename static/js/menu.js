@@ -1,7 +1,7 @@
-// ==================== Menu JavaScript ====================
+
 let cart = [];
 
-// تحميل العربة من localStorage
+
 function loadCart() {
     const saved = localStorage.getItem('foodexpress_cart');
     if (saved) {
@@ -10,13 +10,12 @@ function loadCart() {
     updateCartBadge();
 }
 
-// حفظ العربة في localStorage
+
 function saveCart() {
     localStorage.setItem('foodexpress_cart', JSON.stringify(cart));
     updateCartBadge();
 }
 
-// تحديث عداد العربة
 function updateCartBadge() {
     const totalItems = cart.reduce(function(sum, item) {
         return sum + item.quantity;
@@ -28,7 +27,7 @@ function updateCartBadge() {
     }
 }
 
-// إضافة صنف للعربة
+
 function addToCart(id, name, price) {
     const existing = cart.find(function(item) {
         return item.id === id;
@@ -49,7 +48,7 @@ function addToCart(id, name, price) {
     showToast(name + ' added to cart! 🛒');
 }
 
-// إظهار رسالة Toast
+
 function showToast(message) {
     const toastEl = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
@@ -58,11 +57,11 @@ function showToast(message) {
     toast.show();
 }
 
-// ==================== تهيئة الصفحة ====================
+
 document.addEventListener('DOMContentLoaded', function() {
     loadCart();
     
-    // ربط أزرار Add to Cart
+    
     const buttons = document.querySelectorAll('.add-to-cart-btn');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const price = this.getAttribute('data-price');
             addToCart(id, name, price);
             
-            // تأثير بصري
+            
             this.textContent = '✓ Added!';
             this.classList.add('btn-success');
             this.classList.remove('btn-primary');

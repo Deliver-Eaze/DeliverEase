@@ -1,15 +1,15 @@
-// ==================== Manager JavaScript ====================
+
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ========== أزرار تصفية الطلبات ==========
+    
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(function(button) {
         button.addEventListener('click', function() {
             const status = this.getAttribute('data-status');
             filterOrders(status);
             
-            // تحديث الزر النشط
+            
             filterButtons.forEach(function(btn) {
                 btn.classList.remove('active');
             });
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // ========== أزرار تغيير حالة الطلب ==========
+    
     const statusButtons = document.querySelectorAll('.change-status-btn');
     statusButtons.forEach(function(button) {
         button.addEventListener('click', function() {
@@ -27,12 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // ========== تحديث تلقائي للإحصائيات ==========
-    // كل 30 ثانية نجيب بيانات جديدة
+    
     setInterval(loadStats, 30000);
 });
 
-// ==================== دالة تصفية الطلبات ====================
 function filterOrders(status) {
     const rows = document.querySelectorAll('.order-row');
     
@@ -50,9 +48,9 @@ function filterOrders(status) {
     });
 }
 
-// ==================== دالة تغيير حالة الطلب ====================
+
 function updateOrderStatus(orderId, newStatus) {
-    // تأكيد من المدير
+    
     if (!confirm('Change order #' + orderId + ' status to "' + newStatus + '"?')) {
         return;
     }
@@ -67,10 +65,10 @@ function updateOrderStatus(orderId, newStatus) {
             if (xhr.status === 200) {
                 const data = JSON.parse(xhr.responseText);
                 if (data.success) {
-                    // تحديث الصفحة بدون إعادة تحميل
+                    
                     updateOrderRow(orderId, newStatus);
                     showToast('Order #' + orderId + ' updated to ' + newStatus);
-                    // تحديث الإحصائيات
+                    
                     loadStats();
                 } else {
                     alert('Error: ' + data.error);
@@ -84,26 +82,26 @@ function updateOrderStatus(orderId, newStatus) {
     xhr.send(JSON.stringify({ status: newStatus }));
 }
 
-// ==================== دالة تحديث صف الطلب ====================
+
 function updateOrderRow(orderId, newStatus) {
     const row = document.querySelector('.order-row[data-order-id="' + orderId + '"]');
     if (!row) return;
     
-    // تحديث الـ badge
+    
     const statusBadge = row.querySelector('.status-badge');
     if (statusBadge) {
         statusBadge.textContent = newStatus;
         statusBadge.className = 'badge status-badge bg-' + getStatusColor(newStatus);
     }
     
-    // تحديث data-status
+    
     row.setAttribute('data-status', newStatus);
     
-    // تحديث أزرار تغيير الحالة
+    
     const actionsCell = row.querySelector('.actions-cell');
     if (actionsCell) {
         actionsCell.innerHTML = getActionButtons(orderId, newStatus);
-        // إعادة ربط الأزرار الجديدة
+        
         const newButtons = actionsCell.querySelectorAll('.change-status-btn');
         newButtons.forEach(function(button) {
             button.addEventListener('click', function() {
@@ -115,7 +113,7 @@ function updateOrderRow(orderId, newStatus) {
     }
 }
 
-// ==================== دالة الحصول على لون الحالة ====================
+
 function getStatusColor(status) {
     const colors = {
         'pending': 'warning',
@@ -128,7 +126,7 @@ function getStatusColor(status) {
     return colors[status] || 'secondary';
 }
 
-// ==================== دالة أزرار الإجراءات ====================
+
 function getActionButtons(orderId, status) {
     const allStatuses = ['pending', 'preparing', 'ready', 'out_for_delivery', 'delivered', 'cancelled'];
     const currentIndex = allStatuses.indexOf(status);
@@ -183,7 +181,7 @@ function updateStatsDisplay(data) {
     if (monthlyEl) monthlyEl.textContent = data.monthly_orders;
 }
 
-// ==================== دالة Toast ====================
+
 function showToast(message) {
     const toastContainer = document.getElementById('toast-container');
     if (!toastContainer) return;
@@ -203,13 +201,13 @@ function showToast(message) {
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
     
-    // حذف التوست بعد ما يختفي
+    
     toastEl.addEventListener('hidden.bs.toast', function() {
         toastEl.remove();
     });
 }
 
-// ==================== دالة CSRF Token ====================
+
 function getCSRFToken() {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

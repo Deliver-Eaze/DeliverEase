@@ -1,4 +1,3 @@
-// ==================== Login JavaScript ====================
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -7,16 +6,16 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const password = document.getElementById('password').value;
     const messageDiv = document.getElementById('message');
     
-    // نخفي أي رسالة قديمة
+    
     messageDiv.classList.add('d-none');
     
-    // نتأكد إن الحقول مش فاضية
+    
     if (!username || !password) {
         showMessage('Please fill in all fields', 'danger');
         return;
     }
     
-    // نرسل طلب Ajax للسيرفر
+    
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/login/', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -28,7 +27,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
                 const data = JSON.parse(xhr.responseText);
                 if (data.success) {
                     showMessage('Login successful! Redirecting...', 'success');
-                    // توجيه المستخدم لصفحته بعد ثانية
+                    
                     setTimeout(function() {
                         window.location.href = data.redirect;
                     }, 1000);
